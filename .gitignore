@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.sqlite3
+
+# Fichiers sensibles
+*.env
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+*.db
+
+# Fichiers de configuration IDE
+.vscode/
+
+#fichier brouillon
+test.py
+
