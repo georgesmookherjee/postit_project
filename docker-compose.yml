@@ -1,16 +1,32 @@
 version: '3.8'
+
 services:
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_app_container
+    ports:
+      - "5000:5000"                     # Expose Flask sur le port 5000
+    volumes:
+      - .:/app                         # Monte le répertoire local dans le conteneur
+    environment:
+      FLASK_ENV: development           # Mode développement
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB} # URL de connexion à PostgreSQL
+    depends_on:
+      - postgres                       # Assure que PostgreSQL démarre avant Flask
+
   postgres:
     image: postgres:15
     container_name: postgres_container
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}       # nom d'utilisateur
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}   # mot de passe
-      POSTGRES_DB: ${POSTGRES_DB}             # Nom de la base de données
+      POSTGRES_USER: ${POSTGRES_USER}       # Nom d'utilisateur
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Mot de passe
+      POSTGRES_DB: ${POSTGRES_DB}           # Nom de la base de données
     ports:
       - "5432:5432"                      # Expose PostgreSQL sur le port 5432
     volumes:
       - postgres_data:/var/lib/postgresql/data # Volume pour persistance des données
 
 volumes:
-  postgres_data:  
+  postgres_data:
