@@ -27,7 +27,7 @@ def creer_postit():
     db.session.commit()
     return jsonify({'message': 'Post-it créé avec succès'}), 201
 
-# Route pour lister tous les post-its
+# # Route pour lister tous les post-its
 @app.route('/postits', methods=['GET'])
 def obtenir_postits():
     postits = PostIt.query.all()
