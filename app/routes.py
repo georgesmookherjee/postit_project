@@ -19,7 +19,7 @@ def ping_db():
         return jsonify({'error': str(e)}), 500
 
 # Route pour créer un post-it
-@app.route('/postits', methods=['POST'])
+@app.route('/créer_postit', methods=['POST'])
 def creer_postit():
     data = request.get_json()
     nouveau_postit = PostIt(titre=data['titre'], contenu=data['contenu'])
@@ -36,3 +36,5 @@ def obtenir_postits():
         for p in postits
     ]
     return jsonify(resultats), 200
+
+

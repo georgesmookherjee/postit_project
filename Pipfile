@@ -11,6 +11,8 @@ flask-migrate = "*"
 python-dotenv = "*"
 
 [dev-packages]
+pytest = "*"
+flask-testing = "*"
 
 [requires]
 python_version = "3.12"
