@@ -7,7 +7,7 @@ app = Blueprint('app', __name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', nom='Felix le ouf')
 
 # Route pour tester la connexion à la base de données
 @app.route('/ping_db', methods=['GET'])
