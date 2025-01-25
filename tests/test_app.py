@@ -53,3 +53,20 @@ def test_postit_saved_in_database(client):
         assert postit is not None  # Vérifie que le Post-It existe
         assert postit.contenu == "Contenu de test"  # Vérifie le contenu du Post-It
 
+def test_creer_postit_champs_requis(client):
+    response = client.post('/créer_postit', json={})
+    assert response.status_code == 400
+    assert "Les champs 'titre' et 'contenu' sont requis." in response.json['message']
+
+def test_creer_postit_champs_requis(client):
+    response = client.post('/créer_postit', json={})
+    assert response.status_code == 400
+    assert response.json['message'] == "Les champs 'titre' et 'contenu' sont requis."
+
+def test_obtenir_postits_pagination(client):
+    response = client.get('/postits?page=1&per_page=5')
+    assert response.status_code == 200
+    assert len(response.json) <= 5
+
+
+

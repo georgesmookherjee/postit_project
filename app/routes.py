@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,abort
 from .models import PostIt
 from . import db
 
@@ -18,23 +18,43 @@ def ping_db():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Route pour créer un post-it
+# # Route pour créer un post-it
+# @app.route('/créer_postit', methods=['POST'])
+# def creer_postit():
+#     data = request.get_json()
+#     nouveau_postit = PostIt(titre=data['titre'], contenu=data['contenu'])
+#     db.session.add(nouveau_postit)
+#     db.session.commit()
+#     return jsonify({'message': 'Post-it créé avec succès'}), 201
+
 @app.route('/créer_postit', methods=['POST'])
 def creer_postit():
     data = request.get_json()
+    if not data or not data.get('titre') or not data.get('contenu'):
+        return jsonify({'message': "Les champs 'titre' et 'contenu' sont requis."}), 400
     nouveau_postit = PostIt(titre=data['titre'], contenu=data['contenu'])
     db.session.add(nouveau_postit)
     db.session.commit()
     return jsonify({'message': 'Post-it créé avec succès'}), 201
 
 # # Route pour lister tous les post-its
+# @app.route('/postits', methods=['GET'])
+# def obtenir_postits():
+#     postits = PostIt.query.all()
+#     resultats = [
+#         {'id': p.id, 'titre': p.titre, 'contenu': p.contenu, 'date_creation': p.date_creation}
+#         for p in postits
+#     ]
+#     return jsonify(resultats), 200
+
 @app.route('/postits', methods=['GET'])
 def obtenir_postits():
-    postits = PostIt.query.all()
-    resultats = [
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    postits = PostIt.query.paginate(page=page, per_page=per_page, error_out=False)
+    results = [
         {'id': p.id, 'titre': p.titre, 'contenu': p.contenu, 'date_creation': p.date_creation}
-        for p in postits
+        for p in postits.items
     ]
-    return jsonify(resultats), 200
-
+    return jsonify(results), 200
 
