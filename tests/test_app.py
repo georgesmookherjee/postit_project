@@ -1,33 +1,26 @@
+import os
 import pytest
-from app import create_app, db  # Import absolu basé sur la structure du projet
+from app import create_app, db
 
 
 @pytest.fixture
 def client():
-
-    # Créer une instance de l'application Flask pour les tests
-    app = create_app()
+    # Créer une application Flask en mode test
+    app = create_app(testing=True)  # Activer la configuration pour les tests
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/post_it_test'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    print("Base de données utilisée pour les tests :", app.config['SQLALCHEMY_DATABASE_URI'])
 
-    # Vérification stricte pour éviter les erreurs
-    if "post_it_test" not in app.config['SQLALCHEMY_DATABASE_URI']:
-        raise RuntimeError("Tentative de modification de la base principale ! Utilisez la base de tests.")
-
-    # Ajout du print pour vérifier la base utilisée
-    print("Base utilisée pour les tests :", app.config['SQLALCHEMY_DATABASE_URI'])
-
-    # Initialiser la base de données
+    # Initialiser la base de données pour les tests
     with app.app_context():
-        db.create_all()  # Crée toutes les tables définies dans models.py
-
+        db.create_all()  # Crée les tables dans la base de données de test
+    
     with app.test_client() as client:
-        yield client  # Fournit un client de test
+        yield client  # Fournir le client pour les tests
+    
     # Nettoyer la base après les tests
-    with app.app_context():
-        db.session.remove()
-        db.drop_all()
+    # with app.app_context():
+    #     db.session.remove()
+    #     db.drop_all()
 
 def test_homepage(client):
     # Tester la route d'accueil

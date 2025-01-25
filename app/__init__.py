@@ -11,11 +11,15 @@ load_dotenv()
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(testing=False):
     app = Flask(__name__)
 
     # Configuration de l'application
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # URI PostgreSQL
+    if testing:
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('TEST_DATABASE_URL')  # URI pour la base de tests
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # URI pour la base principale
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
 

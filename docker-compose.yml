@@ -1,32 +1,43 @@
-version: '3.8'
+version: '3.8'  # Retire l'avertissement sur l'attribut 'version'
 
 services:
-  flask_app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: flask_app_container
-    ports:
-      - "5000:5000"                     # Expose Flask sur le port 5000
-    volumes:
-      - .:/app                         # Monte le répertoire local dans le conteneur
+  postgres:  # Service pour la base de données principale
+    image: postgres:14
+    container_name: post_it_db
     environment:
-      FLASK_ENV: development           # Mode développement
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB} # URL de connexion à PostgreSQL
-    depends_on:
-      - postgres                       # Assure que PostgreSQL démarre avant Flask
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
-  postgres:
-    image: postgres:15
-    container_name: postgres_container
+  test_postgres:  # Service pour la base de données de tests
+    image: postgres:14
+    container_name: post_it_test_db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}       # Nom d'utilisateur
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Mot de passe
-      POSTGRES_DB: ${POSTGRES_DB}           # Nom de la base de données
-    ports:
-      - "5432:5432"                      # Expose PostgreSQL sur le port 5432
+      POSTGRES_USER: ${TEST_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TEST_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${TEST_POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Volume pour persistance des données
+      - db_test_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  flask_app:  # Service pour ton application Flask
+    build: .
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+      - test_postgres
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: ${DATABASE_URL}
+      TEST_DATABASE_URL: ${TEST_DATABASE_URL}
 
 volumes:
-  postgres_data:
+  db_data:
+  db_test_data:
