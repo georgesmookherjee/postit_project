@@ -28,7 +28,7 @@ def creer_postit():
     db.session.commit()
     return jsonify({'message': 'Post-it créé avec succès'}), 201
 
-@app.route('/postits', methods=['GET'])
+@app.route('/api/postits', methods=['GET'])
 def obtenir_postits():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
@@ -38,4 +38,17 @@ def obtenir_postits():
         for p in postits.items
     ]
     return jsonify(results), 200
+
+@app.route('/postits')
+def afficher_postits():
+    # Récupère tous les post-its de la base de données
+    postits = PostIt.query.all()
+    # Transforme les post-its en dictionnaires pour Jinja2
+    postits_data = [
+        {'id': p.id, 'titre': p.titre, 'contenu': p.contenu, 'date_creation': p.date_creation}
+        for p in postits
+    ]
+    # Rend le template HTML avec les post-its
+    return render_template('postits.html', postits=postits_data)
+
 

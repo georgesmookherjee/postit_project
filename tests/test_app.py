@@ -64,7 +64,7 @@ def test_creer_postit_champs_requis(client):
     assert response.json['message'] == "Les champs 'titre' et 'contenu' sont requis."
 
 def test_obtenir_postits_pagination(client):
-    response = client.get('/postits?page=1&per_page=5')
+    response = client.get('/api/postits?page=1&per_page=5')
     assert response.status_code == 200
     assert len(response.json) <= 5
 
