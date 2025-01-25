@@ -35,3 +35,4 @@ def creer_postit():
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': 'Erreur lors de la création du post-it', 'error': str(e)}), 500
+

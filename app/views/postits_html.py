@@ -17,3 +17,4 @@ def afficher_postits():
     ]
     return render_template('postits.html', postits=postits_data)
 
+

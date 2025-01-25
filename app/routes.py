@@ -14,3 +14,4 @@ def ping_db():
         return jsonify({'error': str(erreur)}), 500
 
 
+
