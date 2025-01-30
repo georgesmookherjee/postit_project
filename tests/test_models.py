@@ -1,4 +1,5 @@
 from app.models import PostIt, db
+from run import app
 
 def test_create_postit(client):
     """

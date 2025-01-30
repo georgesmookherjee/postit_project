@@ -1,15 +1,11 @@
-import os
-from app import create_app
+from app import create_app, db
 
-# Créer l'application Flask
+# Création de l'application Flask
 app = create_app()
 
+# Vérifie que la base de données est bien initialisée
+with app.app_context():
+    db.create_all()
+
 if __name__ == "__main__":
-    # Charger la configuration de la base principale à partir du fichier .env
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # Démarrer le serveur Flask
     app.run(debug=True)
-
-
