@@ -1,0 +1,12 @@
+.editable {
+    font-size: 1.5rem; /* Augmente la taille du texte */
+    padding: 5px;
+    display: inline-block;
+    border-bottom: 1px dashed #ccc; /* Légère indication que c'est modifiable */
+}
+
+.supprimer-postit {
+    font-size: 0.7rem; /* Réduit la taille du bouton supprimer */
+    padding: 2px 5px;
+}
+

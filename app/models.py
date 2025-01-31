@@ -9,5 +9,3 @@ class PostIt(db.Model):
     contenu = db.Column(db.Text, nullable=False)
     date_creation = db.Column(db.DateTime, server_default=db.func.now())
 
-
-

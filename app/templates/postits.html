@@ -8,12 +8,21 @@
 {% if postits %}
     <ul>
         {% for postit in postits %}
-            <li><strong>{{ postit.titre }}</strong>: {{ postit.contenu }}</li>
+        <li data-id="{{ postit.id }}">
+            <strong contenteditable="true" class="editable titre">{{ postit.titre }}</strong>: 
+            <span contenteditable="true" class="editable contenu">{{ postit.contenu }}</span>
             <br><em>Créé le : {{ postit.date_creation }}</em>
+            <button class="supprimer-postit">-</button>
+        </li>
         {% endfor %}
+
+
+        <button id="add-postit" class="btn btn-primary">+</button>
     </ul>
 {% else %}
     <p>Aucun post-it trouvé.</p>
 {% endif %}
 
 {% endblock %}
+
+    

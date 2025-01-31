@@ -16,10 +16,10 @@ def create_app():
     db.init_app(app)
 
     # Importation et enregistrement des Blueprints
-    from app.routes import toutes_app
+    from app.routes import routes_app
     from app.views.postits_html import html_bp
     
-    app.register_blueprint(toutes_app)
+    app.register_blueprint(routes_app)
     app.register_blueprint(html_bp)
 
     # Création des tables si elles n'existent pas encore

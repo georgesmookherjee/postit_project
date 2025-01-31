@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from app.models import PostIt
-from app import db  # Ajoute l'import de db
+from app import db 
 
 # Blueprint pour l'API JSON
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -10,7 +10,7 @@ def obtenir_postits():
     """
     Renvoie tous les post-its au format JSON.
     """
-    postits = PostIt.query.all()
+    postits = PostIt.query.order_by(PostIt.id).all()
     results = [
         {'id': p.id, 'titre': p.titre, 'contenu': p.contenu, 'date_creation': p.date_creation}
         for p in postits

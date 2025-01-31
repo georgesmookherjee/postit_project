@@ -26,7 +26,7 @@ def test_update_postit(client):
     """
     Teste la mise à jour d'un post-it existant.
     """
-    # ✅ Récupération de l'ID retourné après création
+    # Récupération de l'ID retourné après création
     response = client.post('/api/postits/new', json={"titre": "Ancien titre", "contenu": "Ancien contenu"})
     assert response.status_code == 201
     postit_id = response.json.get("postit_id")
