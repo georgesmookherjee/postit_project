@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.message === "Post-it créé avec succès") {
-                location.reload();  // Recharge la page après ajout
+                location.reload(); // Recharge la page après ajout
             } else {
                 alert("Erreur lors de la création du Post-it");
             }
@@ -23,19 +23,20 @@ document.addEventListener("DOMContentLoaded", function() {
             sauvegarderPostit(this);
         });
 
-        // Permet de sauvegarder avec la touche Entrée
+        // Sauvegarde avec la touche "Entrée"
         element.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                this.blur();  // Simule la perte de focus pour sauvegarder
+                this.blur(); // Simule la perte de focus pour sauvegarder
             }
         });
     });
 
     function sauvegarderPostit(element) {
-        let postitId = element.closest("li").getAttribute("data-id");
-        let titre = element.closest("li").querySelector(".titre").innerText;
-        let contenu = element.closest("li").querySelector(".contenu").innerText;
+        let postit = element.closest(".postit");
+        let postitId = postit.getAttribute("data-id");
+        let titre = postit.querySelector(".titre").innerText.trim();
+        let contenu = postit.querySelector(".contenu").value.trim();
 
         fetch(`/api/postits/${postitId}`, {
             method: "PUT",
@@ -53,16 +54,15 @@ document.addEventListener("DOMContentLoaded", function() {
     // Supprimer un post-it
     document.querySelectorAll(".supprimer-postit").forEach(button => {
         button.addEventListener("click", function() {
-            let postitId = this.closest("li").getAttribute("data-id");
+            let postit = this.closest(".postit");
+            let postitId = postit.getAttribute("data-id");
 
             if (confirm("Voulez-vous vraiment supprimer ce post-it ?")) {
-                fetch(`/api/postits/${postitId}`, {
-                    method: "DELETE"
-                })
+                fetch(`/api/postits/${postitId}`, { method: "DELETE" })
                 .then(response => response.json())
                 .then(data => {
                     if (data.message === "Post-it supprimé avec succès") {
-                        this.closest("li").remove();  // Supprime l'élément sans recharger la page
+                        postit.remove(); // Supprime l'élément sans recharger la page
                     } else {
                         alert("Erreur lors de la suppression !");
                     }
@@ -70,4 +70,5 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
 });

@@ -3,26 +3,30 @@
 {% block title %}Liste des Post-Its{% endblock %}
 
 {% block content %}
-<h1>Liste des Post-Its</h1>
-
-{% if postits %}
-    <ul>
+<div class="container mt-4">
+    <h1 class="text-center">Liste des Post-Its</h1>
+    <div class="row" id="postit-container">
         {% for postit in postits %}
-        <li data-id="{{ postit.id }}">
-            <strong contenteditable="true" class="editable titre">{{ postit.titre }}</strong>: 
-            <span contenteditable="true" class="editable contenu">{{ postit.contenu }}</span>
-            <br><em>Créé le : {{ postit.date_creation }}</em>
-            <button class="supprimer-postit">-</button>
-        </li>
+        <div class="col-md-4">
+            <div class="card postit p-3 mb-3 shadow-sm" data-id="{{ postit.id }}">
+                <strong class="editable titre">{{ postit.titre }}</strong>
+                <textarea class="editable contenu form-control mt-2">{{ postit.contenu }}</textarea>
+                <small class="text-muted">Créé le : {{ postit.date_creation }}</small>
+                <div class="d-flex justify-content-between mt-2">
+                    <button class="btn btn-primary modifier-postit">Modifier</button>
+                    <button class="btn btn-danger supprimer-postit">Supprimer</button>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-
-
-        <button id="add-postit" class="btn btn-primary">+</button>
-    </ul>
-{% else %}
-    <p>Aucun post-it trouvé.</p>
-{% endif %}
+    </div>
+    <div class="text-center mt-3">
+        <button id="add-postit" class="btn btn-success">+</button>
+    </div>
+</div>
 
 {% endblock %}
 
-    
+{% block scripts %}
+<script src="{{ url_for('static', filename='postits.js') }}"></script>
+{% endblock %}

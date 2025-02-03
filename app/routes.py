@@ -28,19 +28,23 @@ def modifier_postit(postit_id):
     return render_template('modifier_postit.html', postit=postit)
 
 
-@routes_app.route('/supprimer/<int:postit_id>', methods=['POST'])
+@routes_app.route('/api/postits/<int:postit_id>', methods=['DELETE'])
 def supprimer_postit(postit_id):
-    postit = PostIt.query.get(postit_id)
-    if postit:
+    postit = db.session.get(PostIt, postit_id)
+    if not postit:
+        return jsonify({"message": "Post-it non trouvé"}), 404
+
+    try:
         db.session.delete(postit)
         db.session.commit()
-        flash("Post-it supprimé avec succès", "success")
-    else:
-        flash("Post-it non trouvé", "error")
+        return jsonify({"message": "Post-it supprimé avec succès"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "Erreur lors de la suppression", "error": str(e)}), 500
 
-    return redirect(url_for('html.afficher_postits'))
 
 
 @routes_app.route('/', methods=['GET'])
 def index():
     return render_template('index.html', nom="Utilisateur")
+
