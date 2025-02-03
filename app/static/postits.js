@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function sauvegarderPostit(element) {
         let postit = element.closest(".postit");
         let postitId = postit.getAttribute("data-id");
-        let titre = postit.querySelector(".titre").innerText.trim();
+        let titre = postit.querySelector(".titre").value.trim();
         let contenu = postit.querySelector(".contenu").value.trim();
 
         fetch(`/api/postits/${postitId}`, {
@@ -70,5 +70,19 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-
+    function reorganiserPostits() {
+        let postitContainer = document.querySelector("#postits-container");
+        
+        if (postitContainer) {
+            let postits = Array.from(postitContainer.children);
+            postits.sort((a, b) => {
+                let dateA = new Date(a.getAttribute("data-created-at"));
+                let dateB = new Date(b.getAttribute("data-created-at"));
+                return dateA - dateB; // Trie les post-its par date de création
+            });
+    
+            postitContainer.innerHTML = ""; // Vide le conteneur
+            postits.forEach(postit => postitContainer.appendChild(postit)); // Réinsère les post-its triés
+        }
+    }
 });

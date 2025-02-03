@@ -5,21 +5,48 @@
     border-bottom: 1px dashed #ccc; /* Légère indication que c'est modifiable */
 }
 
-.supprimer-postit {
-    font-size: 0.7rem; /* Réduit la taille du bouton supprimer */
-    padding: 2px 5px;
+.postit-title, .postit-content {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
-.btn-modifier, .btn-supprimer {
-    background-color: white !important;
-    color: inherit !important;
-    border: 1px solid #ddd !important;
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.btn-modifier:hover {
-    background-color: #f8f9fa !important;
+p {
+    font-size: 5 rem;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.btn-supprimer:hover {
-    background-color: #f8f9fa !important;
+nav {
+    font-size: 5 rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+#postit-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    justify-content: center;
+}
+
+.postit {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: 0.3s;
+}
+
+.postit:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

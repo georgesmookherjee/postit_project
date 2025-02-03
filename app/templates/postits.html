@@ -5,23 +5,23 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="text-center">Liste des Post-Its</h1>
-    <div class="row" id="postit-container">
+    <div id="postit-container" class="row">
         {% for postit in postits %}
         <div class="col-md-4">
-            <div class="card postit p-3 mb-3 shadow-sm" data-id="{{ postit.id }}">
-                <strong class="editable titre">{{ postit.titre }}</strong>
-                <textarea class="editable contenu form-control mt-2">{{ postit.contenu }}</textarea>
+            <div class="card postit p-3 mb-3 " data-id="{{ postit.id }}">
+                <input type="text" class="postit-title editable titre" value="{{ postit.titre }}" />
+                <textarea class="postit-content editable contenu form-control mt-2">{{ postit.contenu }}</textarea>              
                 <small class="text-muted">Créé le : {{ postit.date_creation }}</small>
                 <div class="d-flex justify-content-between mt-2">
-                    <button class="btn btn-primary modifier-postit">Modifier</button>
-                    <button class="btn btn-danger supprimer-postit">Supprimer</button>
+                    <button class="btn btn-outline-primary modifier-postit">Modifier</button>
+                    <button class="btn btn-outline-danger supprimer-postit">Supprimer</button>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
     <div class="text-center mt-3">
-        <button id="add-postit" class="btn btn-success">+</button>
+        <button id="add-postit" class="btn btn-outline-success">+</button>
     </div>
 </div>
 
