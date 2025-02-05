@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
-from app.models import PostIt
-from app import db 
+from ..models import PostIt
+from .. import db
+
 
 # Blueprint pour l'API JSON
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -10,12 +11,9 @@ def obtenir_postits():
     """
     Renvoie tous les post-its au format JSON.
     """
-    postits = PostIt.query.order_by(PostIt.id).all()
-    results = [
-        {'id': p.id, 'titre': p.titre, 'contenu': p.contenu, 'date_creation': p.date_creation}
-        for p in postits
-    ]
-    return jsonify(results), 200
+    postits = PostIt.query.order_by(PostIt.id.asc()).all()  # Trie par date de création (du plus ancien au plus récent)
+    return jsonify([postit.to_dict() for postit in postits])
+
 
 @api_bp.route('/postits/new', methods=['POST'])
 def creer_postit():
@@ -33,7 +31,12 @@ def creer_postit():
 
         return jsonify({
             'message': 'Post-it créé avec succès',
-            'postit_id': nouveau_postit.id
+            "postit": {
+                "id": nouveau_postit.id,
+                "titre": nouveau_postit.titre,
+                "contenu": nouveau_postit.contenu,
+                "date_creation": nouveau_postit.date_creation.strftime('%Y-%m-%d %H:%M:%S')
+            }
         }), 201
     except Exception as e:
         db.session.rollback()

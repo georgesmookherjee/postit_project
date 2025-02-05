@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h1 class="text-center">Liste des Post-Its</h1>
     <div id="postit-container" class="row">
-        {% for postit in postits %}
+        {% for postit in postits|sort(attribute='id') %}
         <div class="col-md-4">
             <div class="card postit p-3 mb-3 " data-id="{{ postit.id }}">
                 <input type="text" class="postit-title editable titre" value="{{ postit.titre }}" />
@@ -29,8 +29,8 @@
 
 {% block scripts %}
 <!-- <script src="{{ url_for('static', filename='postits.js') }}"></script> -->
-<script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
+<!-- <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/add_postit.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/edit_postit.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/delete_postit.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/delete_postit.js') }}" defer></script> -->
 {% endblock %}

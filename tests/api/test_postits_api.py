@@ -26,12 +26,10 @@ def test_update_postit(client):
     """
     Teste la mise à jour d'un post-it existant.
     """
-    # Récupération de l'ID retourné après création
     response = client.post('/api/postits/new', json={"titre": "Ancien titre", "contenu": "Ancien contenu"})
     assert response.status_code == 201
-    postit_id = response.json.get("postit_id")
+    postit_id = response.json["postit"]["id"]  # 🔹 Correction ici
 
-    # Mise à jour du post-it
     response = client.put(f'/api/postits/{postit_id}', json={"titre": "Nouveau titre", "contenu": "Nouveau contenu"})
     assert response.status_code == 200
     assert response.json['message'] == "Post-it mis à jour avec succès"
@@ -54,7 +52,7 @@ def test_update_postit_invalid_data(client):
     # Création d'un post-it
     response = client.post('/api/postits/new', json={"titre": "Titre", "contenu": "Contenu"})
     assert response.status_code == 201
-    postit_id = response.json.get("postit_id")
+    postit_id = response.json.get("postit", {}).get("id")
 
     # Envoi d'une requête sans données
     response = client.put(f'/api/postits/{postit_id}', json={})
@@ -65,17 +63,14 @@ def test_delete_postit(client):
     """
     Teste la suppression d'un post-it existant.
     """
-    # Création d'un post-it pour le test
     response = client.post('/api/postits/new', json={"titre": "Test Delete", "contenu": "Contenu Delete"})
     assert response.status_code == 201
+    postit_id = response.json["postit"]["id"]  # 🔹 Correction ici
 
-    postit_id = response.json.get("postit_id")
-    assert postit_id is not None
-
-    # Suppression du post-it
     response = client.delete(f'/api/postits/{postit_id}')
     assert response.status_code == 200
     assert response.json["message"] == "Post-it supprimé avec succès"
+
 
 def test_delete_postit_not_found(client):
     """
