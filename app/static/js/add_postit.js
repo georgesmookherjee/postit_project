@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch("/api/postits/new", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ titre: "Nouveau Post-it", contenu: "..." })
+            body: JSON.stringify({ titre: "nouveau", contenu: "..." })
         })
         .then(response => response.json())
         .then(data => {
