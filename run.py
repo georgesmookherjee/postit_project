@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # Importation des Blueprints
 from app.routes import routes_app
-from app.api.postits_api import api_app  # Assure-toi que c'est bien le bon chemin
+from app.api.postits_api import api_bp  # Assure-toi que c'est bien le bon chemin
 
 app = Flask(__name__)
 app.config.from_object(current_config)
