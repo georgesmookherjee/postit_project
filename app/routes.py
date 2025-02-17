@@ -39,7 +39,7 @@ def supprimer_postit(postit_id):
 
 @routes_app.route('/', methods=['GET'])
 def index():
-    return render_template('app/templates/index.html', nom="Utilisateur")
+    return render_template('templates/index.html', nom="Utilisateur")
 
 @routes_app.route('/favicon.ico')
 def favicon():
