@@ -17,8 +17,9 @@ def create_app(testing=False):
     if testing:
         app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('TEST_DATABASE_URL')
     else:
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL_DEV')
+    
+    app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
 
