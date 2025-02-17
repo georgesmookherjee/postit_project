@@ -3,6 +3,11 @@ from config import current_config
 from flask_sqlalchemy import SQLAlchemy
 import os
 from app.models import db
+from dotenv import load_dotenv
+from flask_migrate import Migrate
+
+# Charger les variables d'environnement depuis .env
+load_dotenv()
 
 # Spécifier le dossier templates explicitement
 app = Flask(__name__, template_folder=os.path.join(os.getcwd(), "app", "templates"))
@@ -10,8 +15,7 @@ app = Flask(__name__, template_folder=os.path.join(os.getcwd(), "app", "template
 app.config.from_object(current_config)
 
 db.init_app(app)  #initialise la base de données
-
-db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Importer et enregistrer les Blueprints
 from app.routes import routes_app
