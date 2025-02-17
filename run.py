@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 
 # Enregistrement des Blueprints
 app.register_blueprint(routes_app)
-app.register_blueprint(api_app, url_prefix="/api")  # Si tes routes API sont sous /api
+app.register_blueprint(api_bp, url_prefix="/api")  # Si tes routes API sont sous /api
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
