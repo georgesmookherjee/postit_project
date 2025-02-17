@@ -1,11 +1,11 @@
-from app import create_app, db
+from flask import Flask
+from config import current_config
+from flask_sqlalchemy import SQLAlchemy
 
-# Création de l'application Flask
-app = create_app()
+app = Flask(__name__)
+app.config.from_object(current_config)
 
-# Vérifie que la base de données est bien initialisée
-with app.app_context():
-    db.create_all()
+db = SQLAlchemy(app)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=(current_config == "development"))

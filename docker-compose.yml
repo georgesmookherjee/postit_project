@@ -1,7 +1,5 @@
-# version: '3.8'  # Retire l'avertissement sur l'attribut 'version'
-
 services:
-  postgres:  # Service pour la base de données principale
+  postgres:  # Base de données principale (Production / Dev)
     image: postgres:14
     container_name: post_it_db
     environment:
@@ -17,7 +15,7 @@ services:
       interval: 10s
       retries: 5
 
-  test_postgres:  # Service pour la base de données de tests
+  test_postgres:  # Base de données dédiée aux tests
     image: postgres:14
     container_name: post_it_test_db
     environment:
@@ -33,7 +31,7 @@ services:
       interval: 10s
       retries: 5
 
-  flask_app:  # Service pour ton application Flask
+  flask_app:  # Service Flask
     build: .
     container_name: flask_app
     env_file: 
@@ -41,17 +39,21 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - postgres
-      - test_postgres
+      postgres:
+        condition: service_healthy
+      test_postgres:
+        condition: service_healthy
     environment:
-      FLASK_ENV: development
+      FLASK_ENV: ${FLASK_ENV}
       DATABASE_URL: ${DATABASE_URL}
       TEST_DATABASE_URL: ${TEST_DATABASE_URL}
     entrypoint: >
-      sh -c "until pg_isready -h postgres -p 5432; do sleep 5; done;
+      sh -c "if [ \"$FLASK_ENV\" = \"testing\" ]; then
       until pg_isready -h test_postgres -p 5432; do sleep 5; done;
+      else
+      until pg_isready -h postgres -p 5432; do sleep 5; done;
+      fi;
       python run.py"
-
 
 volumes:
   db_data:

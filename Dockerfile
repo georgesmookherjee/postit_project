@@ -21,7 +21,7 @@ COPY . .
 EXPOSE 5000
 
 # Commande pour lancer l'application
-CMD ["python", "run.py"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
 
 # Ajouter un utilisateur non-root et lui attribuer un home directory
 RUN useradd -m myuser
