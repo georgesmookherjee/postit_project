@@ -15,3 +15,17 @@ def test_postits_page(client):
     print("Contenu de la réponse:", response.data)
     assert response.status_code == 200
     assert b"Liste des Post-Its" in response.data
+
+
+from bs4 import BeautifulSoup
+
+def test_postit_display(client):
+    client.post("/api/postits/new", json={"titre": "Test affichage", "contenu": "Vérif HTML"})
+
+    response = client.get("/postits")
+    assert response.status_code == 200
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    postit_titles = [p["value"].strip() for p in soup.find_all("input", class_="postit-title")]  # Adapté à ta structure HTML
+
+    assert "Test affichage" in postit_titles

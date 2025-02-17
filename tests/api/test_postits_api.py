@@ -79,3 +79,14 @@ def test_delete_postit_not_found(client):
     response = client.delete('/api/postits/99999')  # ID qui n'existe pas
     assert response.status_code == 404
     assert response.json["message"] == "Post-it non trouvé"
+
+
+def test_create_multiple_postits(client):
+    for i in range(50):  # Tester avec 50 post-its
+        response = client.post("/api/postits/new", json={"titre": f"Post-it {i}", "contenu": "Test"})
+        assert response.status_code == 201  # Vérifie que l'ajout fonctionne
+
+    # Vérifie qu'on a bien 50 post-its en base
+    response = client.get("/api/postits")
+    assert response.status_code == 200
+    assert len(response.json) == 50

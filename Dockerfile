@@ -7,6 +7,8 @@ WORKDIR /app
 # Copier le fichier requirements.txt dans le conteneur
 COPY requirements.txt .
 
+RUN apt-get update && apt-get install -y curl
+
 RUN apt-get update && apt-get install -y postgresql-client
 
 # Installer les dépendances

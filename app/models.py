@@ -9,3 +9,10 @@ class PostIt(db.Model):
     contenu = db.Column(db.Text, nullable=False)
     date_creation = db.Column(db.DateTime, server_default=db.func.now())
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "titre": self.titre,
+            "contenu": self.contenu,
+            # "created_at": self.date_creation.strftime("%Y-%m-%d %H:%M:%S")  # Optionnel
+        }
