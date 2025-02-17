@@ -2,11 +2,14 @@ from flask import Flask
 from config import current_config
 from flask_sqlalchemy import SQLAlchemy
 import os
+from app.models import db
 
 # Spécifier le dossier templates explicitement
 app = Flask(__name__, template_folder=os.path.join(os.getcwd(), "app", "templates"))
 
 app.config.from_object(current_config)
+
+db.init_app(app)  #initialise la base de données
 
 db = SQLAlchemy(app)
 

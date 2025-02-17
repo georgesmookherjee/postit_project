@@ -1,6 +1,8 @@
 from . import db
 from flask import current_app
 
+# db = SQLAlchemy()
+
 class PostIt(db.Model):
     __tablename__ = 'postits'
 

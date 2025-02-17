@@ -9,7 +9,8 @@ routes_app = Blueprint('routes', __name__)
 
 @routes_app.route('/postits', methods=['GET'])
 def afficher_postits_html():
-    return render_template("postits.html")
+    postits = PostIt.query.order_by(PostIt.id.asc()).all()
+    return render_template("postits.html", postits=postits)
 
 @routes_app.route('/ping_db', methods=['GET'])
 def ping_db():
