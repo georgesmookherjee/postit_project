@@ -11,34 +11,21 @@ def obtenir_postits():
     postits = PostIt.query.order_by(PostIt.id.asc()).all()  # Trie par date de création (du plus ancien au plus récent)
     return jsonify([postit.to_dict() for postit in postits])
 
-
-@api_bp.route('/postits/new', methods=['POST'])
+@api_bp.route('/postits', methods=['POST'])
 def creer_postit():
-    """
-    Crée un nouveau post-it.
-    """
+    """Crée un post-it sans obligation de remplir le titre ou le contenu."""
     data = request.get_json()
-    if not data or not isinstance(data, dict) or not data.get('titre') or not data['titre'].strip() or not data.get('contenu') or not data['contenu'].strip():
-        return jsonify({'message': "Les champs 'titre' et 'contenu' sont requis et ne doivent pas être vides."}), 400
+    if not data:
+        return jsonify({'message': "Requête invalide."}), 400
 
-    try:
-        nouveau_postit = PostIt(titre=data['titre'], contenu=data['contenu'])
-        db.session.add(nouveau_postit)
-        db.session.commit()
+    titre = data.get('titre', '').strip()
+    contenu = data.get('contenu', '').strip()
 
-        return jsonify({
-            'message': 'Post-it créé avec succès',
-            "postit": {
-                "id": nouveau_postit.id,
-                "titre": nouveau_postit.titre,
-                "contenu": nouveau_postit.contenu,
-                "date_creation": nouveau_postit.date_creation.strftime('%Y-%m-%d %H:%M:%S')
-            }
-        }), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': 'Erreur lors de la création du post-it', 'error': str(e)}), 500
+    nouveau_postit = PostIt(titre=titre, contenu=contenu)
+    db.session.add(nouveau_postit)
+    db.session.commit()
 
+    return jsonify(nouveau_postit.to_dict()), 201
 
 @api_bp.route('/postits/<int:postit_id>', methods=['PUT'])
 def mettre_a_jour_postit(postit_id):
@@ -70,11 +57,7 @@ def supprimer_postit(postit_id):
     if not postit:
         return jsonify({'message': 'Post-it non trouvé'}), 404
 
-    try:
-        db.session.delete(postit)
-        db.session.commit()
-        return jsonify({'message': 'Post-it supprimé avec succès'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': 'Erreur lors de la suppression du post-it', 'error': str(e)}), 500
+    db.session.delete(postit)
+    db.session.commit()
+    return jsonify({'message': 'Post-it supprimé avec succès'}), 200
 

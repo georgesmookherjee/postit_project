@@ -6,11 +6,11 @@ class PostIt(db.Model):
     __tablename__ = 'postits'
 
     id = db.Column(db.Integer, primary_key=True)
-    titre = db.Column(db.String(100), nullable=False)
+    titre = db.Column(db.String(25), nullable=False)
     contenu = db.Column(db.Text, nullable=False)
     date_creation = db.Column(db.DateTime, server_default=db.func.now())
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     # user = db.relationship('User', backref=db.backref('postits', lazy=True))
 
     def to_dict(self):
