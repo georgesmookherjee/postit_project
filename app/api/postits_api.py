@@ -1,10 +1,7 @@
 from flask import Blueprint, jsonify, request
 from ..models import PostIt
-from .. import db
-
-
-# Blueprint pour l'API JSON
-api_bp = Blueprint('api', __name__, url_prefix='/api')
+from app import db
+from . import api_bp  # On importe api_bp de __init__.py
 
 @api_bp.route('/postits', methods=['GET'])
 def obtenir_postits():
@@ -80,3 +77,4 @@ def supprimer_postit(postit_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': 'Erreur lors de la suppression du post-it', 'error': str(e)}), 500
+

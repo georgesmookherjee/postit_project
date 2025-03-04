@@ -1,7 +1,6 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for, send_from_directory
-from .models import db, PostIt
-from . import db
-from flask import flash
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, send_from_directory, flash
+from .models import PostIt
+from app import db
 import os
 
 # Blueprint pour les routes générales
@@ -20,19 +19,19 @@ def ping_db():
     except Exception as erreur:
         return jsonify({'error': str(erreur)}), 500
 
-@routes_app.route('/api/postits/<int:postit_id>', methods=['DELETE'])
-def supprimer_postit(postit_id):
-    postit = db.session.get(PostIt, postit_id)
-    if not postit:
-        return jsonify({"message": "Post-it non trouvé"}), 404
+# @routes_app.route('/api/postits/<int:postit_id>', methods=['DELETE'])
+# def supprimer_postit(postit_id):
+#     postit = db.session.get(PostIt, postit_id)
+#     if not postit:
+#         return jsonify({"message": "Post-it non trouvé"}), 404
 
-    try:
-        db.session.delete(postit)
-        db.session.commit()
-        return jsonify({"message": "Post-it supprimé avec succès"}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"message": "Erreur lors de la suppression", "error": str(e)}), 500
+#     try:
+#         db.session.delete(postit)
+#         db.session.commit()
+#         return jsonify({"message": "Post-it supprimé avec succès"}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({"message": "Erreur lors de la suppression", "error": str(e)}), 500
 
 
 

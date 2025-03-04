@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+from config import current_config
 import os
 
 # Charger les extensions
@@ -13,16 +14,8 @@ load_dotenv()
 
 def create_app(testing=False):
     app = Flask(__name__)
-
-    if testing:
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('TEST_DATABASE_URL')
-    else:
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', os.getenv('DATABASE_URL_DEV'))
-    
-    app.config['SQLALCHEMY_ECHO'] = True
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
-
+    app.config.from_object(current_config)  # Charge la config définie dans config.py automatiquement
+        
     db.init_app(app)
     migrate.init_app(app, db)
 

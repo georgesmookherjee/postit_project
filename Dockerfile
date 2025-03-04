@@ -1,41 +1,39 @@
-# Utiliser une image Python comme base
-FROM python:3.9-slim
+# Utilisation d'une image Python légère
+FROM python:3.12-slim
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier le fichier requirements.txt dans le conteneur
+# Installation des dépendances système nécessaires
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    postgresql-client \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copier les fichiers nécessaires pour l'installation des dépendances
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y curl
-
-RUN apt-get update && apt-get install -y postgresql-client
-
-# Installer les dépendances
+# Installation des dépendances Python avec `--no-cache-dir` pour éviter d'alourdir l'image
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copier le reste des fichiers dans le conteneur
-COPY . .
-
-# Exposer le port Flask
-EXPOSE 5000
-
-# Commande pour lancer l'application
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
-
-# Ajouter un utilisateur non-root et lui attribuer un home directory
+# Création d'un utilisateur non root
 RUN useradd -m myuser
 
-# Changer les permissions du dossier de travail pour cet utilisateur
-RUN chown -R myuser:myuser /app
+# Copier le reste du code de l'application
+COPY . .
 
-# Passer en mode utilisateur non-root
+# Assurer les permissions sur le dossier migrations
+RUN mkdir -p /app/migrations && chown -R myuser:myuser /app/migrations
+
+# Définition des variables d'environnement
+ENV FLASK_APP=run.py
+ENV FLASK_ENV=production
+
+# Exposition du port Flask
+EXPOSE 5000
+
+# Passer en utilisateur non root
 USER myuser
 
-# Définition de la variable d'environnement indiquant le fichier principal de l'application Flask
-ENV FLASK_APP=run.py
-# Flask saura que le fichier d'entrée est run.py
-
-# Définition du mode d'exécution de Flask (développement ou production)
-ENV FLASK_ENV=development  
-#Active le mode développement (permet le rechargement auto et le debug)
+# Commande de démarrage (avec entrypoint pour init migrations)
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "run:app"]

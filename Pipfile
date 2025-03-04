@@ -11,6 +11,7 @@ flask-migrate = "*"
 python-dotenv = "*"
 beautifulsoup4 = "*"
 gunicorn = "*"
+flask-login = "*"
 
 [dev-packages]
 pytest = "*"
