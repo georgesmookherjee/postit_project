@@ -1,67 +1,52 @@
-#Ce fichier docker-compose.yml définit trois services :
-#PostgreSQL principal (postgres) : utilisé pour le développement et la production.
-#PostgreSQL pour les tests (test_postgres) : base de données séparée pour éviter daltérer les données de dev/prod.
-#Flask (flask_app) : lapplication principale, qui dépend des bases de données et attend quelles soient prêtes avant de démarrer.
-
 
 services:
-  postgres:  # Base de données principale (Production / Dev)
-    image: postgres:14  # Utilisation de l'image PostgreSQL version 14
-    container_name: post_it_db  # Nom du conteneur pour faciliter l'identification
+  postgres:
+    image: postgres:15  # Utilise PostgreSQL version 15
+    restart: always  # Redémarre automatiquement en cas d'erreur
+    env_file:
+      - .env  # Charge les variables d'environnement
     environment:
-      POSTGRES_USER: ${DEV_POSTGRES_USER}  # Récupération de l'utilisateur depuis le fichier .env
-      POSTGRES_PASSWORD: ${DEV_POSTGRES_PASSWORD}  # Mot de passe défini dans .env
-      POSTGRES_DB: ${DEV_POSTGRES_DB}  # Nom de la base de données définie dans .env
-    volumes:
-      - db_data:/var/lib/postgresql/data  # Volume pour stocker les données et assurer leur persistance
+      POSTGRES_USER: ${DEV_POSTGRES_USER}  # Nom d'utilisateur de la base de données
+      POSTGRES_PASSWORD: ${DEV_POSTGRES_PASSWORD}  # Mot de passe de la base de données
+      POSTGRES_DB: ${DEV_POSTGRES_DB}  # Nom de la base de données
     ports:
-      - "5432:5432"  # Exposition du port PostgreSQL pour les connexions extérieures
-    healthcheck:  # Vérification de l'état du service
-      test: ["CMD-SHELL", "pg_isready -U ${DEV_POSTGRES_USER}"]  # Vérifie si PostgreSQL est prêt
-      interval: 10s  # Vérifie toutes les 10 secondes
-      retries: 5  # Nombre maximal de tentatives avant de considérer que le service a échoué
-
-  test_postgres:  # Base de données dédiée aux tests
-    image: postgres:14  # Même image que pour la base principale
-    container_name: post_it_test_db  # Nom distinct pour éviter les conflits
-    environment:
-      POSTGRES_USER: ${TEST_POSTGRES_USER}  # Variables spécifiques pour la base de test
-      POSTGRES_PASSWORD: ${TEST_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${TEST_POSTGRES_DB}
+      - "5432:5432"  # Réexpose PostgreSQL pour DBeaver et outils externes
     volumes:
-      - db_test_data:/var/lib/postgresql/data  # Volume dédié aux données de test
-    ports:
-      - "5433:5432"  # Exposition sur un port différent pour ne pas interférer avec la base principale
-    healthcheck:  # Vérification de l'état de santé du service
-      test: ["CMD-SHELL", "pg_isready -U ${TEST_POSTGRES_USER}"]
+      - db_data:/var/lib/postgresql/data  # Persistance des données PostgreSQL
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DEV_POSTGRES_USER} -d ${DEV_POSTGRES_DB}"]
       interval: 10s
       retries: 5
+    networks:
+      - post_it_network  # Réseau Docker isolé
 
-  flask_app:  # Service Flask
-    build: .  # Build à partir du Dockerfile dans le répertoire courant
+  flask_app:
+    build: .  # Construit l'image depuis le Dockerfile du projet
     container_name: flask_app  # Nom du conteneur Flask
-    env_file: 
-      - .env  # Chargement des variables d'environnement depuis un fichier .env
-    ports:
-      - "5000:5000"  # Exposition de l'application Flask sur le port 5000
-    depends_on:  # Dépendances avec les bases de données (attente avant de démarrer)
+    restart: always  # Redémarre automatiquement en cas de crash
+    depends_on:
       postgres:
-        condition: service_healthy  # Démarrage de Flask uniquement si PostgreSQL est prêt
-      test_postgres:
-        condition: service_healthy
-    environment:  # Variables d'environnement passées au conteneur Flask
-      FLASK_ENV: ${FLASK_ENV}  # Mode d'exécution (développement, test, production)
-      DEV_DATABASE_URL: ${DEV_DATABASE_URL}  # URL de la base de données en dev
-      TEST_DATABASE_URL: ${TEST_DATABASE_URL}  # URL de la base de données de test
-      PROD_DATABASE_URL: ${PROD_DATABASE_URL}  # URL de la base de données en production
-    entrypoint: >  # Commande exécutée au démarrage du conteneur Flask
-      sh -c "if [ \"$FLASK_ENV\" = \"testing\" ]; then
-      until pg_isready -h test_postgres -p 5432; do sleep 5; done;
-      else
-      until pg_isready -h postgres -p 5432; do sleep 5; done;
-      fi;
-      python run.py"  # Attente que la base de données soit prête avant de lancer Flask
+        condition: service_healthy  # Attend que PostgreSQL soit prêt avant de démarrer
+    env_file:
+      - .env  # Charge les variables d'environnement
+    environment:
+      FLASK_ENV: ${FLASK_ENV}  # Mode d'exécution de Flask
+      SQLALCHEMY_DATABASE_URI: ${DEV_DATABASE_URL}  # URL de connexion à PostgreSQL
+    ports:
+      - "5000:5000"  # Expose l'application Flask sur le port 5000
+    volumes:
+      - .:/app  # Monte le projet local dans le conteneur
+    command: >
+      sh -c "
+      until pg_isready -h postgres -U ${DEV_POSTGRES_USER}; do echo 'Waiting for DB...'; sleep 2; done;
+      flask db upgrade && python run.py
+      "
+    networks:
+      - post_it_network  # Réseau privé
 
 volumes:
-  db_data:  # Volume pour la base de données principale
-  db_test_data:  # Volume pour la base de données de test
+  db_data:  # Volume pour PostgreSQL
+
+networks:
+  post_it_network:  # Réseau Docker isolé
+    driver: bridge
