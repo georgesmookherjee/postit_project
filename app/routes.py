@@ -6,14 +6,14 @@ import os
 # Blueprint pour les routes générales
 routes_app = Blueprint('routes', __name__)
 
-@routes_app.route('/postits', methods=['GET'])
-def afficher_postits_html():
-    postits = PostIt.query.order_by(PostIt.id.asc()).all()
-    return render_template("postits.html", postits=postits)
+# @routes_app.route('/postits', methods=['GET'])
+# def afficher_postits_html():
+#     postits = PostIt.query.order_by(PostIt.id.asc()).all()
+#     return render_template("postits.html", postits=postits)
 
-@routes_app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html', nom="Visiteur")
+# @routes_app.route('/', methods=['GET'])
+# def index():
+#     return render_template('index.html', nom="Visiteur")
 
 # @routes_app.route('/favicon.ico')
 # def favicon():

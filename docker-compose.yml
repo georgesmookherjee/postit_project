@@ -45,17 +45,28 @@ services:
       test_postgres:
         condition: service_healthy
     environment:
-      FLASK_ENV: ${FLASK_ENV}
+      APP_ENV: ${APP_ENV}
+      TESTING_MODE: ${TESTING_MODE}
       DEV_DATABASE_URL: ${DEV_DATABASE_URL}
       TEST_DATABASE_URL: ${TEST_DATABASE_URL}
     entrypoint: >
-      sh -c "if [ \"$FLASK_ENV\" = \"testing\" ]; then
-      until pg_isready -h test_postgres -p 5432; do sleep 5; done;
-      export DATABASE_URL=$TEST_DATABASE_URL;
+      sh -c "
+      echo 'APP_ENV='$APP_ENV;
+      echo 'TESTING_MODE='$TESTING_MODE;
+
+      if [ \"$TESTING_MODE\" = \"true\" ]; then
+        echo 'Mode test détecté, connexion à la base de test...';
+        until pg_isready -h test_postgres -p 5432; do sleep 5; done;
+        export DATABASE_URL=$TEST_DATABASE_URL;
       else
-      until pg_isready -h postgres -p 5432; do sleep 5; done;
+        echo 'Mode dev/prod détecté, connexion à la base principale...';
+        until pg_isready -h postgres -p 5432; do sleep 5; done;
+        export DATABASE_URL=$DEV_DATABASE_URL;
       fi;
-      python run.py"
+
+      echo 'Base de données utilisée: ' $DATABASE_URL;
+      python run.py
+      "
 
 volumes:
   db_data:
