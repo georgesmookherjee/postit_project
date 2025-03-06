@@ -11,10 +11,9 @@ def afficher_postits_html():
     postits = PostIt.query.order_by(PostIt.id.asc()).all()
     return render_template("postits.html", postits=postits)
 
-
 @routes_app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', nom="Utilisateur")
+    return render_template('index.html', nom="Visiteur")
 
 # @routes_app.route('/favicon.ico')
 # def favicon():

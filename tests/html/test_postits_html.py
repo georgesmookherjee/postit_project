@@ -20,7 +20,7 @@ def test_postits_page(client):
 from bs4 import BeautifulSoup
 
 def test_postit_display(client):
-    client.post("/api/postits/new", json={"titre": "Test affichage", "contenu": "Vérif HTML"})
+    client.post("/api/postits", json={"titre": "Test affichage", "contenu": "Vérif HTML"})
 
     response = client.get("/postits")
     assert response.status_code == 200

@@ -1,4 +1,4 @@
-"""Aubaisser aractères titres à 25
+"""baisser caractères titres à 25
 
 Revision ID: d5e1270b2216
 Revises: 0c63ac971705
