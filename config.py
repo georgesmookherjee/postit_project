@@ -25,13 +25,19 @@ class ProductionConfig(Config):
 APP_ENV = os.getenv("APP_ENV", "development")
 TESTING_MODE = os.getenv("TESTING_MODE", "false").lower() == "true"
 
-if TESTING_MODE:
-    current_config = TestingConfig()
-else:
-    configurations = {
+configurations = {
         "development": DevelopmentConfig,
         "testing": TestingConfig,
         "production": ProductionConfig
     }
+
+# Choix de la configuration
+if TESTING_MODE or APP_ENV == "testing":
+    current_config = TestingConfig()
+else:
     current_config = configurations.get(APP_ENV, DevelopmentConfig)()
 
+print(f"🔍 Configuration chargée: {current_config.__class__.__name__}")
+print(f"🔍 SQLALCHEMY_DATABASE_URI: {current_config.SQLALCHEMY_DATABASE_URI}")
+print(f"🔍 TESTING_MODE = {TESTING_MODE}")
+print(f"🔍 APP_ENV = {APP_ENV}")

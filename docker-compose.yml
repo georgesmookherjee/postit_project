@@ -46,7 +46,7 @@ services:
         condition: service_healthy
     environment:
       APP_ENV: ${APP_ENV}
-      TESTING_MODE: ${TESTING_MODE}
+      TESTING_MODE: $TESTING_MODE
       DEV_DATABASE_URL: ${DEV_DATABASE_URL} 
       TEST_DATABASE_URL: ${TEST_DATABASE_URL}
     command: sh -c "export TESTING_MODE=true && pytest"

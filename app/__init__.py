@@ -22,11 +22,9 @@ def create_app(testing=False):
     migrate.init_app(app, db)  # Ajout de Flask-Migrate ici pour assurer la gestion des migrations
     
     # Enregistrer les Blueprints
-    #from .routes import routes_app
     from .api.postits_api import api_bp
     from .views.postits_html import html_bp
 
-    #app.register_blueprint(routes_app)
     app.register_blueprint(api_bp)
     app.register_blueprint(html_bp)
 
