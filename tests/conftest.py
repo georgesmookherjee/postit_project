@@ -2,38 +2,30 @@ import pytest
 from app import create_app, db
 import os
 import time
-import psycopg2
 
-# Forcer le mode test
+# 🔹 Forcer explicitement le mode TESTING avant de créer l'application
 os.environ["TESTING_MODE"] = "true"
+os.environ["APP_ENV"] = "testing"  # S'assurer que Flask reconnaît bien l'environnement de test
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def client():
-    app = create_app(testing=True)  # Active le mode test
+    """Fixture qui initialise l'application Flask en mode test et utilise la base de test."""
+    # 🔹 Création de l'application en mode test
+    app = create_app(testing=True)
+
+    # 🔹 Vérification stricte de la base de données utilisée
     database_url = os.getenv("TEST_DATABASE_URL")
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+    app.config["TESTING"] = True
+
+    # 🔹 Vérification supplémentaire pour éviter d'impacter la BDD de dev
+    assert "test" in app.config["SQLALCHEMY_DATABASE_URI"], "❌ ERREUR: Mauvaise base utilisée !"
 
     with app.app_context():
         db.create_all()  # Créer les tables pour le test
-        yield app.test_client()
-        db.session.remove()  # <- s'assurer qu'aucune connexion ne reste ouverte
-        db.drop_all()  # Nettoyer après les tests
-        print("Base de test nettoyée")  # Vérification si cette ligne s'affiche après chaque test
+        yield app.test_client()  # Exposer le client de test à pytest
 
-# def wait_for_db():
-#     retries = 2  # Ajuster le nombre de tentatives
-#     while retries > 0:
-#         try:
-#             conn = psycopg2.connect(
-#                 os.getenv('TEST_DATABASE_URL'),
-#                 connect_timeout=3  # Timeout pour éviter les blocages
-#             )
-#             conn.close()
-#             return
-#         except psycopg2.OperationalError as e:
-#             print(f"Attente de la base de données de test... ({retries} tentatives restantes)")
-#             print(f"Erreur : {e}")
-#             retries -= 1
-#             time.sleep(2)  # ajuster le nombre de secondes avant de réessayer
-
-#     raise Exception("La base de données de test n'est pas prête après plusieurs tentatives !")
+        # Nettoyage après les tests
+        db.session.remove()  # S'assurer qu'aucune connexion ne reste ouverte
+        db.drop_all()  # Supprimer toutes les tables après chaque test
+        time.sleep(1)  # 🔹 Délai pour éviter des problèmes avec PostgreSQL
