@@ -37,7 +37,4 @@ if TESTING_MODE or APP_ENV == "testing":
 else:
     current_config = configurations.get(APP_ENV, DevelopmentConfig)()
 
-print(f"🔍 Configuration chargée: {current_config.__class__.__name__}")
-print(f"🔍 SQLALCHEMY_DATABASE_URI: {current_config.SQLALCHEMY_DATABASE_URI}")
-print(f"🔍 TESTING_MODE = {TESTING_MODE}")
-print(f"🔍 APP_ENV = {APP_ENV}")
+SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", os.getenv("DEV_DATABASE_URL"))
