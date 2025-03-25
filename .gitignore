@@ -28,3 +28,5 @@ brouillon.py
 
 # Ignorer les configurations spécifiques de Docker
 docker-compose.override.yml
+
+.idea
