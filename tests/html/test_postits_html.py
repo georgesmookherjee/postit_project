@@ -16,16 +16,21 @@ def test_postits_page(client):
     assert response.status_code == 200
     assert b"Liste des Post-Its" in response.data
 
-
+import json
 from bs4 import BeautifulSoup
 
 def test_postit_display(client):
-    client.post("/api/postits", json={"titre": "Test affichage", "contenu": "Vérif HTML"})
+    # 1️⃣ Ajouter un post-it via l'API REST
+    postit_data = {"titre": "Test affichage", "contenu": "Vérif API"}
+    response = client.post("/api/postits", json=postit_data)
+    assert response.status_code == 201  # Vérifier que l'ajout s'est bien fait
 
-    response = client.get("/postits")
-    assert response.status_code == 200
+    # 2️⃣ Récupérer les post-its via l'API REST
+    response = client.get("/api/postits")
+    assert response.status_code == 200  # Vérifier que la requête fonctionne
 
-    soup = BeautifulSoup(response.text, "html.parser")
-    postit_titles = [p["value"].strip() for p in soup.find_all("input", class_="postit-title")]  # Adapté à ta structure HTML
+    postits = response.json  # Convertir en JSON
+    postit_titles = [p["titre"] for p in postits]  # Extraire les titres
 
+    # 3️⃣ Vérifier que le titre "Test affichage" est bien dans la liste
     assert "Test affichage" in postit_titles

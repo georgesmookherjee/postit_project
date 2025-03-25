@@ -19,7 +19,7 @@ class PostIt(db.Model):
             "id": self.id,
             "titre": self.titre,
             "contenu": self.contenu,
-            # "created_at": self.date_creation.strftime("%Y-%m-%d %H:%M:%S")  # Optionnel
+            "created_at": self.date_creation.strftime("%Y-%m-%d %H:%M:%S")  # Optionnel
         }
 
 # class User(db.Model, UserMixin):

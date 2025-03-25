@@ -15,7 +15,7 @@
         <h1>Mon Site de Post-Its</h1>
         <nav>
             <a href="{{ url_for('html.home') }}">Accueil</a>  |  
-            <a href="{{ url_for('html.afficher_postits') }}">Voir les Post-Its</a>
+            <a href="/postits">Voir les Post-Its</a>
         </nav>
     </header>
     <main>
@@ -25,6 +25,7 @@
     <script src="{{ url_for('static', filename='js/add_postit.js') }}"></script>
     <script src="{{ url_for('static', filename='js/delete_postit.js') }}"></script>
     <script src="{{ url_for('static', filename='js/edit_postit.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/get_postits.js') }}"></script>
 </body>
 </html>
 
