@@ -24,7 +24,7 @@ function ajouterPostit() {
 
 function afficherPostit(data) {
     if (!data.id) {
-        alert("Erreur lors de la création du Post-it");
+        showNotification("Erreur lors de la création du Post-it");
         return;
     }
 

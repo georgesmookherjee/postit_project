@@ -11,6 +11,12 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Ajout Blackfire
+# RUN pip install blackfire
+
+# # Active le profiling Python (injecte un hook au démarrage)
+# RUN python -m blackfire bootstrap
+
 # Copie du code source
 COPY . .
 

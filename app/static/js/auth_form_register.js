@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     showNotification(data.message);
                     location.reload();
                 } else if (data.error) {
-                    alert("Erreur : " + data.error);
+                    showNotification("Erreur : " + data.error);
                 }
             })
             .catch(err => {

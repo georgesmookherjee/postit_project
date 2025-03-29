@@ -18,12 +18,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.message) {
                     location.reload();
                 } else if (data.error) {
-                    alert("Erreur : " + data.error);
+                    showNotification("Erreur : " + data.error);
                 }
             })
             .catch(err => {
                 console.error("Erreur serveur :", err);
-                alert("Erreur de connexion");
+                showNotification("Erreur de connexion");
             });
         });
     }

@@ -19,11 +19,13 @@ function sauvegarderPostit(element) {
 }
 
 function showNotification(message, duration = 3000) {
-    const notif = document.getElementById("notification");
-    notif.innerText = message;
-    notif.style.display = "block";
-
+    const box = document.getElementById("message-box");
+    box.textContent = message;
+    box.classList.add("show");
+    box.classList.remove("hide");
+  
     setTimeout(() => {
-        notif.style.display = "none";
+      box.classList.add("hide");
+      box.classList.remove("show");
     }, duration);
-}
+  }

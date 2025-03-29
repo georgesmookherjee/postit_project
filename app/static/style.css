@@ -64,3 +64,30 @@ nav {
 .postit:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+#message-box {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-200%);
+    background-color: #e0ffe0;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-weight: bold;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+    z-index: 9999;
+  }
+  
+  #message-box.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  
+  #message-box.hide {
+    transform: translateX(-50%) translateY(-200%);
+    opacity: 0;
+  }
+  
