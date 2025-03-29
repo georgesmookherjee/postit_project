@@ -39,6 +39,8 @@ services:
       - .env
     ports:
       - "5000:5000"
+    volumes:
+      - .:/app  # Monte ton dossier local dans le conteneur
     depends_on:
       postgres:
         condition: service_healthy

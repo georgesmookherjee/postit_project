@@ -10,6 +10,7 @@
     <link rel="icon" href="data:,">
 
 </head>
+
 <body>
     <header>
         <h1>Mon Site de Post-Its</h1>
@@ -19,13 +20,33 @@
         </nav>
     </header>
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
-    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/add_postit.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/delete_postit.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/edit_postit.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/get_postits.js') }}"></script>
+    <div class="text-center mt-5">
+        <!-- <span id="welcome-user" class="fw-bold me-3"></span> -->
+        <button id="logout-btn" style="display: none;" class="btn btn-outline-danger btn-sm">Déconnexion</button>
+    </div>
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='js/check_auth_status.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/auth_logout.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    {% endblock %}
+    <div id="notification" style="
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-weight: bold;
+    ">
+    </div>
+
 </body>
 </html>
 

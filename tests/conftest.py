@@ -29,3 +29,4 @@ def client():
         db.session.remove()  # S'assurer qu'aucune connexion ne reste ouverte
         db.drop_all()  # Supprimer toutes les tables après chaque test
         time.sleep(1)  # 🔹 Délai pour éviter des problèmes avec PostgreSQL
+

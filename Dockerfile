@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 5000
 
 # Commande de démarrage
-CMD ["python", "run.py"]
+CMD ["python", "run.py", "--host=0.0.0.0", "--port=5000", "--reload"]

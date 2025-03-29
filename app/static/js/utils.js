@@ -17,3 +17,13 @@ function sauvegarderPostit(element) {
         }
     });
 }
+
+function showNotification(message, duration = 3000) {
+    const notif = document.getElementById("notification");
+    notif.innerText = message;
+    notif.style.display = "block";
+
+    setTimeout(() => {
+        notif.style.display = "none";
+    }, duration);
+}

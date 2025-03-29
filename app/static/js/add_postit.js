@@ -12,13 +12,13 @@ function ajouterPostit() {
     fetch("/api/postits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ titre: "titre", contenu: "contenu" })
+        body: JSON.stringify({ titre: " ", contenu: " " })
     })
     .then(response => response.ok ? response.json() : Promise.reject(response.status))
     .then(data => afficherPostit(data))
     .catch(error => {
         console.error("Erreur lors de la requête :", error);
-        alert("Erreur serveur. Vérifiez votre connexion.");
+        showNotification("Erreur serveur. Vérifiez votre connexion.");
     });
 }
 

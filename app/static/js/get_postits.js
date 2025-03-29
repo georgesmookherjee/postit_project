@@ -1,9 +1,29 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // fetch("/auth/status")
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         if (!data.logged_in) {
+    //             alert("Vous devez être connecté pour accéder à cette page.");
+    //             return;
+    //         }
+    //         document.getElementById("auth-links").innerHTML = `
+    //             <a href="/auth/logout" id="logout-link">Se déconnecter (${data.username})</a>
+    //         `;
+            chargerPostIts();
+        });
+//});
+
+function chargerPostIts() {
     fetch("/api/postits")
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById("postit-container");
-            container.innerHTML = ""; // Vide le container avant d'ajouter les post-its
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML = "<p class='text-center'>Aucun post-it trouvé.</p>";
+                return;
+            }
 
             data.forEach(postit => {
                 const postitDiv = document.createElement("div");
@@ -22,11 +42,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 container.appendChild(postitDiv);
             });
 
-            // Ajouter les événements pour modifier/supprimer
             attachEventListeners();
         })
         .catch(error => console.error("Erreur lors de la récupération des post-its:", error));
-});
+}
 
 // Fonction pour formater la date correctement
 function formatDate(dateStr) {

@@ -1,6 +1,4 @@
 from flask import Blueprint, render_template
-from app.models import PostIt
-from app import db
 
 # Blueprint pour les pages HTML
 html_bp = Blueprint('html', __name__)

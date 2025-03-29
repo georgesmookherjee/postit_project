@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Liste des Post-Its{% endblock %}
+<!-- {% block title %}Liste des Post-its{% endblock %} -->
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center">Liste des Post-Its</h2>
+    <h2 class="text-center">Liste des Post-its</h2>
     <div id="postit-container" class="row">
        <!-- Les post-its seront chargés ici via JavaScript --> 
     </div>
@@ -16,4 +16,9 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/add_postit.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/delete_postit.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/edit_postit.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/get_postits.js') }}"></script>
 {% endblock %}

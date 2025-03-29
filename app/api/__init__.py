@@ -1,6 +1,14 @@
 from flask import Blueprint
 
-api_bp = Blueprint("api", __name__, url_prefix="/api")
+# Création des Blueprints
 
-# Importer ici les routes API
+# Blueprint pour les post-its
+postits_api = Blueprint("postits_api", __name__, url_prefix="/api")
+
+# Blueprint pour l'authentification
+auth_api = Blueprint("auth_api", __name__, url_prefix="/auth")
+
+# Import des routes associées
 from .postits_api import *
+from .auth_api import *
+
