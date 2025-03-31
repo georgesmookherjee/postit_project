@@ -69,3 +69,7 @@ def status():
     if current_user.is_authenticated:
         return jsonify({"logged_in": True, "username": current_user.username}), 200
     return jsonify({"logged_in": False}), 401
+
+# @auth_api.route('/login', methods=['GET'])
+# def login_get():
+#     return jsonify({"error": "Veuillez utiliser POST pour vous connecter"}), 405

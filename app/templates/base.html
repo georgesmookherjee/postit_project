@@ -26,12 +26,13 @@
 
     <div class="text-center mt-5">
         <!-- <span id="welcome-user" class="fw-bold me-3"></span> -->
-        <button id="logout-btn" style="display: none;" class="btn btn-outline-danger btn-sm">Déconnexion</button>
+        <button id="logout-btn" style="display: none;" class="btn btn-outline-danger">Déconnexion</button>
     </div>
 
     <div id="message-box"></div>
 
     {% block scripts %}
+        <!-- <script src="{{ url_for('static', filename='js/auth_helpers.js') }}"></script> -->
         <script src="{{ url_for('static', filename='js/check_auth_status.js') }}"></script>
         <script src="{{ url_for('static', filename='js/auth_logout.js') }}"></script>
         <script src="{{ url_for('static', filename='js/utils.js') }}"></script>

@@ -1,51 +1,34 @@
-.editable {
-    font-size: 1.5rem; /* Augmente la taille du texte */
-    padding: 5px;
-    display: inline-block;
-    border-bottom: 1px dashed #ccc; /* Légère indication que c'est modifiable */
-}
-
-.postit-title, .postit-content {
-    border: none !important;
-    outline: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
+/* ====== TITRES ====== */
+h1, h2 {
+    text-align: center;
+    margin: 30px 0 20px 0; /* top, right, bottom, left */
+    font-weight: bold;
 }
 
 h1 {
     font-size: 2.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 h2 {
-    font-size: 2.0rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
+    font-size: 2rem;
 }
 
-a {
-    font-size: 1.15rem;
-    /* font-weight: bold; */
+/* ====== TEXTE ====== */
+p, nav, a {
+    font-size: 1.20rem;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
-p {
-    font-size: 5 rem;
-    text-align: center;
-    margin-bottom: 20px;
+/* ====== ÉLÉMENTS ÉDITABLES ====== */
+.editable {
+    font-size: 1.5rem;
+    padding: 5px;
+    display: inline-block;
+    border-bottom: 1px dashed #ccc;
 }
 
-nav {
-    font-size: 5 rem;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-
+/* ====== POST-ITS ====== */
 #postit-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -58,13 +41,22 @@ nav {
     padding: 15px;
     border-radius: 8px;
     background-color: #fff;
-    transition: 0.3s;
+    transition: box-shadow 0.3s ease;
 }
 
 .postit:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.postit-title,
+.postit-content {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* ====== MESSAGE BOX ====== */
 #message-box {
     position: fixed;
     top: 20px;
@@ -74,20 +66,54 @@ nav {
     color: #333;
     padding: 10px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-weight: bold;
     transition: transform 0.4s ease, opacity 0.4s ease;
     opacity: 0;
     z-index: 9999;
-  }
-  
-  #message-box.show {
+}
+
+#message-box.show {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
-  }
-  
-  #message-box.hide {
+}
+
+#message-box.hide {
     transform: translateX(-50%) translateY(-200%);
     opacity: 0;
-  }
-  
+}
+
+#logout-btn {
+    font-size: 1rem;
+    padding: 12px 24px;
+    border-radius: 6px;
+}
+
+#add-postit {
+    font-size: 1.5rem;
+    padding: 6px 18px !important;
+    border-radius: 6px;
+}
+
+#btn-access-postits {
+    display: block; /* nécessaire si tu veux centrer avec margin auto */
+    width: fit-content; /* ou fixe comme 300px */
+    margin: 50px auto 10px auto !important; /* top, right, bottom, left */
+    font-size: 1.4rem;
+    padding: 8px 24px !important;
+    border-radius: 6px !important;
+}
+
+#btn-access-postits:hover{
+    background-color: #0d6efd !important; /* bleu Bootstrap rempli */
+    color: #fff !important;
+    transition: all 0.3s ease;
+}
+
+#btn-access-postits{
+    transition: all 0.3s ease;
+}
+
+#welcome-user {
+    margin: 0px 0 20px 0; /* top, right, bottom, left */
+}

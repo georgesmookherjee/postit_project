@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -14,6 +14,9 @@ db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()  # Définition globale
 login_manager.login_view = "auth_api.login"  # Redirection vers /auth/login si non connecté
+@login_manager.unauthorized_handler
+def unauthorized():
+    return jsonify({"error": "Authentification requise"}), 401
 
 def create_app(testing=False):
     app = Flask(__name__)

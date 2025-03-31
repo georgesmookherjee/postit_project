@@ -8,7 +8,7 @@
     <div id="postit-container" class="row">
        <!-- Les post-its seront chargés ici via JavaScript --> 
     </div>
-    <div class="text-center mt-3">
+    <div class="text-center">
         <button id="add-postit" class="btn btn-outline-primary">+</button>
     </div>
 </div>
@@ -17,8 +17,6 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='js/add_postit.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/delete_postit.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/edit_postit.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/postits_events.js') }}"></script>
     <script src="{{ url_for('static', filename='js/get_postits.js') }}"></script>
 {% endblock %}

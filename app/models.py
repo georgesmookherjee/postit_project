@@ -28,7 +28,6 @@ class PostIt(db.Model):
     titre = db.Column(db.String(25), nullable=False)
     contenu = db.Column(db.Text, nullable=False)
     date_creation = db.Column(db.DateTime, server_default=db.func.now())
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def to_dict(self):
