@@ -4,7 +4,6 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from config import current_config
-# import os
 
 # Charger les variables d'environnement
 load_dotenv()
