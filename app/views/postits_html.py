@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from ..decorators import admin_required, current_user
-from flask_login import login_required
+from flask_login import login_required, current_user
+from ..decorators import admin_required
 
 # Blueprint pour les pages HTML
 html_bp = Blueprint('html', __name__)
