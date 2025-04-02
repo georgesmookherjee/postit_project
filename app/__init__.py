@@ -13,6 +13,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()  # Définition globale
 login_manager.login_view = "auth_api.login"  # Redirection vers /auth/login si non connecté
+
 @login_manager.unauthorized_handler
 def unauthorized():
     return jsonify({"error": "Authentification requise"}), 401
@@ -27,11 +28,12 @@ def create_app(testing=False):
     login_manager.init_app(app)  # Maintenant disponible pour tout le projet
 
     # Importation des Blueprints
-    from .api import postits_api, auth_api
+    from .api import postits_api, auth_api, admin_api
     from .views.postits_html import html_bp
 
     app.register_blueprint(postits_api)
     app.register_blueprint(html_bp)
     app.register_blueprint(auth_api)
+    app.register_blueprint(admin_api)
 
     return app

@@ -16,6 +16,9 @@
         <nav>
             <a href="{{ url_for('html.home') }}">Accueil</a>  |  
             <a href="/postits">Voir les Post-Its</a>
+            {% if current_user.is_authenticated and current_user.is_administrator() %}
+            |  <a href="{{ url_for('html.admin_panel') }}">Administration</a>
+            {% endif %}
         </nav>
     </header>
 

@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
     # Relation avec les Post-its
     postits = db.relationship('PostIt', backref='user', lazy=True)
@@ -20,6 +21,10 @@ class User(db.Model, UserMixin):
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+        # Méthode pour vérifier si l'utilisateur est admin
+    def is_administrator(self):
+        return self.is_admin
 
 class PostIt(db.Model):
     __tablename__ = 'postits'

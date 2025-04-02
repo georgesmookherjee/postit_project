@@ -1,0 +1,61 @@
+<!-- app/templates/admin.html -->
+{% extends "base.html" %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Panneau d'administration</h2>
+    
+    <div class="card mt-4 mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Statistiques générales</h3>
+        </div>
+        <div class="card-body">
+            <div id="stats-container" class="row">
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h4 id="users-count">-</h4>
+                            <p>Utilisateurs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h4 id="postits-count">-</h4>
+                            <p>Post-its</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h4 id="avg-postits">-</h4>
+                            <p>Moy. post-its/utilisateur</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Gestion des utilisateurs</h3>
+        </div>
+        <div class="card-body">
+            <div id="users-list" class="table-responsive">
+                <!-- Les utilisateurs seront chargés ici via JavaScript -->
+                <p class="text-center">Chargement des utilisateurs...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
