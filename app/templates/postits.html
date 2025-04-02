@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
-<!-- {% block title %}Liste des Post-its{% endblock %} -->
-
 {% block content %}
-<div class="container mt-4">
-    <h2 class="text-center">Liste des Post-its</h2>
-
-    <div id="auth-container">
-        <!-- Le formulaire de connexion sera affiché ici si nécessaire -->
+<div class="container mt-2">    
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-5">
+            <h2 id="postits-list" class="text-center">Liste des Post-its</h2>
+            <div id="auth-form-container"></div>
+        </div>
     </div>
 
     <div id="postit-container" class="row">
@@ -17,115 +16,31 @@
         <button id="add-postit" class="btn btn-outline-primary">+</button>
     </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/auth_components.js') }}"></script>
     <script src="{{ url_for('static', filename='js/postits_events.js') }}"></script>
     <script src="{{ url_for('static', filename='js/get_postits.js') }}"></script>
     <script>
-        // Dans le script pour la page postits.html, modifiez comme suit:
-document.addEventListener("DOMContentLoaded", function() {
-    fetch("/auth/status")
-        .then(res => res.json())
-        .then(data => {
-            if (!data.logged_in) {
-                // Afficher le formulaire de connexion
-                document.getElementById("auth-container").innerHTML = `
-                    <div class="row justify-content-center mt-4 mb-4">
-                        <div class="col-md-6">
-                            <div class="card p-3 shadow">
-                                <h3 class="text-center mb-3">Connexion requise</h3>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email :</label>
-                                    <input type="email" id="email" class="form-control" placeholder="Votre email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">Nom d'utilisateur :</label>
-                                    <input type="text" id="username" class="form-control" placeholder="Nom d'utilisateur">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Mot de passe :</label>
-                                    <input type="password" id="password" class="form-control" placeholder="Votre mot de passe" required>
-                                </div>
-                                <button type="button" id="login-btn" class="btn btn-primary w-100">Se connecter</button>
-                                <button type="button" id="register-btn" class="btn btn-secondary w-100 mt-2">Créer un compte</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Cacher le bouton d'ajout et le conteneur de post-its
-                document.getElementById("add-postit").style.display = "none";
-                
-                // Attacher les événements aux boutons après les avoir créés
-                attachAuthEvents();
-            }
-        })
-        .catch(err => {
-            console.warn("Erreur de vérification de connexion:", err);
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/auth/status")
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        createAuthForm('auth-form-container');
+                        
+                        // Cacher le bouton d'ajout
+                        const addButton = document.getElementById("add-postit");
+                        if (addButton) {
+                            addButton.style.display = "none";
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.warn("Erreur de vérification de connexion:", err);
+                });
         });
-});
-
-// Fonction pour attacher les événements d'authentification
-function attachAuthEvents() {
-    const loginBtn = document.getElementById("login-btn");
-    const registerBtn = document.getElementById("register-btn");
-    
-    if (loginBtn) {
-        loginBtn.addEventListener("click", function() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            fetch("/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ identifier: email, password })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.message) {
-                    // Recharger la page après connexion réussie
-                    window.location.reload();
-                } else if (data.error) {
-                    showNotification("Erreur : " + data.error);
-                }
-            })
-            .catch(err => {
-                console.error("Erreur serveur :", err);
-                showNotification("Erreur de connexion");
-            });
-        });
-    }
-    
-    if (registerBtn) {
-        registerBtn.addEventListener("click", function() {
-            const email = document.getElementById("email").value;
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            fetch("/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, username, password })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.message) {
-                    showNotification(data.message);
-                    // Recharger la page après inscription réussie pour afficher les post-its
-                    window.location.reload();
-                } else if (data.error) {
-                    showNotification("Erreur : " + data.error);
-                }
-            })
-            .catch(err => {
-                console.error("Erreur serveur :", err);
-                showNotification("Erreur lors de l'inscription");
-            });
-        });
-    }
-}
     </script>
 {% endblock %}

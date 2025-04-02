@@ -117,3 +117,27 @@ p, nav, a {
 #welcome-user {
     margin: 0px 0 20px 0; /* top, right, bottom, left */
 }
+
+#postits-list {
+    margin: 0px 0 20px 0; /* top, right, bottom, left */
+}
+
+
+#auth-form-container {
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 500px; /* Largeur maximale fixe pour les deux pages */
+}
+
+#auth-form-container .card {
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+#auth-form-container-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 0rem 0;
+    width: 100%;
+}
