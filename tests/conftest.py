@@ -37,7 +37,8 @@ def client():
     app.config["TESTING"] = True
 
     # 🔹 Vérification supplémentaire pour éviter d'impacter la BDD de dev
-    assert "test" in app.config["SQLALCHEMY_DATABASE_URI"], "❌ ERREUR: Mauvaise base utilisée !"
+    db_url = app.config["SQLALCHEMY_DATABASE_URI"]
+    assert any(test_marker in db_url for test_marker in ["test", "test_db"]), f"❌ ERREUR: Base de données inappropriée détectée: {db_url}"
 
     with app.app_context():
         db.create_all()  # Créer les tables pour le test
