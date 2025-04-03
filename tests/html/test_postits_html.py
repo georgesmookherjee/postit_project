@@ -1,32 +1,34 @@
-def test_homepage(client):
+def test_homepage(authenticated_client):
     """
     Teste que la page d'accueil s'affiche correctement.
     """
-    response = client.get('/')
-    print(response.data)
+    response = authenticated_client.get('/')
     assert response.status_code == 200
-    assert b"Bienvenue sur votre site de Post-Its" in response.data
+    
+    soup = BeautifulSoup(response.data, 'html.parser')
+    assert soup.find('h1').text == "Mon Site de Post-Its"  # Vérifie le titre h1
 
-def test_postits_page(client):
+def test_postits_page(authenticated_client):
     """
     Teste que la page HTML des post-its s'affiche correctement.
     """
-    response = client.get('/postits')
-    print("Contenu de la réponse:", response.data)
+    response = authenticated_client.get('/postits')
     assert response.status_code == 200
-    assert b"Liste des Post-Its" in response.data
+    
+    soup = BeautifulSoup(response.data, 'html.parser')
+    assert soup.find('h2', id='postits-list').text == "Liste des Post-its"  # Vérifie le titre avec l'ID
 
 import json
 from bs4 import BeautifulSoup
 
-def test_postit_display(client):
+def test_postit_display(authenticated_client):
     # 1️⃣ Ajouter un post-it via l'API REST
     postit_data = {"titre": "Test affichage", "contenu": "Vérif API"}
-    response = client.post("/api/postits", json=postit_data)
+    response = authenticated_client.post("/api/postits", json=postit_data)
     assert response.status_code == 201  # Vérifier que l'ajout s'est bien fait
 
     # 2️⃣ Récupérer les post-its via l'API REST
-    response = client.get("/api/postits")
+    response = authenticated_client.get("/api/postits")
     assert response.status_code == 200  # Vérifier que la requête fonctionne
 
     postits = response.json  # Convertir en JSON

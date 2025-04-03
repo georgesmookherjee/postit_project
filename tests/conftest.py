@@ -8,6 +8,24 @@ os.environ["TESTING_MODE"] = "true"
 os.environ["APP_ENV"] = "testing"  # S'assurer que Flask reconnaît bien l'environnement de test
 
 @pytest.fixture(scope="function")
+def authenticated_client(client):
+    """Fixture qui fournit un client déjà authentifié pour les tests."""
+    # Créer un utilisateur de test
+    client.post('/auth/register', json={
+        'username': 'testuser',
+        'email': 'test@example.com',
+        'password': 'testpassword'
+    })
+    
+    # Connecter l'utilisateur
+    client.post('/auth/login', json={
+        'identifier': 'test@example.com',
+        'password': 'testpassword'
+    })
+    
+    return client
+
+@pytest.fixture(scope="function")
 def client():
     """Fixture qui initialise l'application Flask en mode test et utilise la base de test."""
     # 🔹 Création de l'application en mode test
@@ -28,5 +46,5 @@ def client():
         # Nettoyage après les tests
         db.session.remove()  # S'assurer qu'aucune connexion ne reste ouverte
         db.drop_all()  # Supprimer toutes les tables après chaque test
-        time.sleep(1)  # 🔹 Délai pour éviter des problèmes avec PostgreSQL
+        #time.sleep(1)  # 🔹 Délai pour éviter des problèmes avec PostgreSQL
 

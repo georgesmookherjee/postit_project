@@ -12,6 +12,7 @@ python-dotenv = "*"
 beautifulsoup4 = "*"
 gunicorn = "*"
 flask-login = "*"
+playwright = "*"
 
 [dev-packages]
 pytest = "*"
