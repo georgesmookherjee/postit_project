@@ -1,28 +1,31 @@
-# Dans tests/ui/conftest.py ou dans ton conftest.py principal
-
+import os
 import pytest
 from playwright.sync_api import sync_playwright
 
+# Configurer la marque UI pour éviter l'avertissement
+def pytest_configure(config):
+    config.addinivalue_line("markers", "ui: mark test as a UI test")
+
 @pytest.fixture(scope="session")
-def browser_type_launch_args(browser_type_launch_args):
+def browser_type_launch_args():
     """Configure le lancement du navigateur pour les tests."""
     return {
-        **browser_type_launch_args,
-        "headless": True,  # true pour exécuter sans interface, false pour voir le navigateur
+        "headless": True,
+        "args": [
+            "--no-sandbox",
+            "--disable-dev-shm-usage"  # Recommandé pour Docker
+        ]
     }
+
+@pytest.fixture(scope="function")
+def page(browser):
+    """Crée une nouvelle page pour chaque test."""
+    page = browser.new_page()
+    yield page
+    page.close()
 
 @pytest.fixture(scope="session")
-def browser_context_args(browser_context_args):
-    """Configure le contexte du navigateur."""
-    return {
-        **browser_context_args,
-        "viewport": {
-            "width": 1280,
-            "height": 720,
-        },
-    }
-
-@pytest.fixture
 def base_url():
     """URL de base pour les tests."""
-    return "http://flask_app:5000"  # URL du service Flask dans Docker Compose
+    # Utiliser la variable d'environnement BASE_URL si elle existe
+    return os.environ.get('BASE_URL', 'http://flask_app:5000')

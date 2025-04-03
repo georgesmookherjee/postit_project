@@ -163,6 +163,14 @@ services:
       python run.py
       "
 
+  test_ui:
+    build: .
+    depends_on:
+      - flask_app
+    environment:
+      - BASE_URL=http://flask_app:5000
+    command: python -m pytest tests/ui -v
+
 volumes:
   db_data:
   db_test_data:
