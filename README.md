@@ -44,7 +44,7 @@ docker-compose exec flask_app python -m pytest -v tests/api/test_postits_api.py:
 ```
 En cas de problème avec la base de données de test, vider les volumes avec :
 ```bash
-docker-compose down -v
+docker-compose down
 ```
 Puis relancer les conteneurs :
 ```bash
@@ -67,35 +67,10 @@ Une fois les tests validés, on peut déployer l'application.
    - Configurer les bases de données distantes.
    - Déployer l'image.
 
-## Structure du projet
-```
-postit_project/
-│── app/
-│   ├── routes.py
-│   ├── models.py
-│   ├── postits_api.py
-│   ├── templates/
-│   ├── static/
-│   ├── utils.py
-│   ├── __init__.py
-│   ├── config.py
-│── tests/
-│   ├── api/
-│   │   ├── test_postits_api.py
-│   ├── html/
-│   ├── test_models.py
-│── Dockerfile
-│── docker-compose.yml
-│── requirements.txt
-│── .env
-│── README.md
-│── run.py
-```
+
 
 ## Améliorations futures
-- Ajout d'une interface utilisateur plus ergonomique
 - Séparation complète backend / frontend avec React
-- Ajout d'un système d'authentification pour que les post-its soient reliés à un utilisateur unique
 - Ajouter "Automatisation des tests et CI/CD" si tu envisages d'intégrer une pipeline GitHub Actions ou autre.
 
 ## Auteur
