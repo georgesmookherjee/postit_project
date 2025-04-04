@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from config import current_config
+# import blackfire
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -25,7 +26,15 @@ def create_app(testing=False):
     # Initialisation des extensions avec l'application
     db.init_app(app)
     migrate.init_app(app, db)
-    login_manager.init_app(app)  # Maintenant disponible pour tout le projet
+    login_manager.init_app(app)  # disponible pour tout le projet
+
+    import os
+    os.environ['BLACKFIRE_AGENT_SOCKET'] = 'tcp://blackfire:8307'
+
+    # Wrapping de l'application avec Blackfire (seulement en mode non-test)
+    # if not testing:
+    #     # utilisation initialize() pour blackfire
+    #     blackfire.initialize()
 
     # Importation des Blueprints
     from .api import postits_api, auth_api, admin_api

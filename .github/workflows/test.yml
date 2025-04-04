@@ -62,7 +62,7 @@ jobs:
         coverage xml
 
     # - name: Upload coverage report
-    #   if: success()
+    #   if success()
     #   uses: codecov/codecov-action@v3
     #   with:
     #     file: ./coverage.xml
@@ -83,7 +83,7 @@ jobs:
     #     TESTING_MODE: "true"
     #     APP_ENV: "testing"
     #     FLASK_APP: run.py
-    #     PYTHONPATH: ${{ github.workspace }}
+    #     PYTHONPATH: {{ github.workspace }}
     #   run: |
     #     python -c "import os; print('TEST_DATABASE_URL in Python:', os.getenv('TEST_DATABASE_URL'))"
     #     python -m pytest -v tests/api/test_postits_api.py::test_get_postits -v

@@ -3,7 +3,7 @@ from app import create_app, db
 import os
 import time
 
-# 🔹 Forcer explicitement le mode TESTING avant de créer l'application
+# Forcer explicitement le mode TESTING avant de créer l'application
 os.environ["TESTING_MODE"] = "true"
 os.environ["APP_ENV"] = "testing"  # S'assurer que Flask reconnaît bien l'environnement de test
 

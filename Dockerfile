@@ -35,6 +35,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install playwright pytest-playwright && \
     playwright install chromium --with-deps
 
+# Ajout Blackfire
+RUN pip install blackfire
+
+# Active le profiling Python (injecte un hook au démarrage)
+RUN python -m blackfire bootstrap
+
 # Copie du code source
 COPY . .
 
@@ -43,9 +49,3 @@ EXPOSE 5000
 
 # Commande de démarrage
 CMD ["python", "run.py", "--host=0.0.0.0", "--port=5000", "--reload"]
-
-# Ajout Blackfire
-# RUN pip install blackfire
-
-# # Active le profiling Python (injecte un hook au démarrage)
-# RUN python -m blackfire bootstrap
