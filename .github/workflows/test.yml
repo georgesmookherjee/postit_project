@@ -20,9 +20,9 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd pg_isready
-          --health-interval 3s
-          --health-timeout 3s
-          --health-retries 5
+          --health-interval 1s
+          --health-timeout 1s
+          --health-retries 2
     
     steps:
     - uses: actions/checkout@v3
