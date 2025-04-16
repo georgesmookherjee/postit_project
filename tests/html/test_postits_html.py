@@ -6,7 +6,7 @@ def test_homepage(authenticated_client):
     assert response.status_code == 200
     
     soup = BeautifulSoup(response.data, 'html.parser')
-    assert soup.find('h1').text == "Mon Site de Post-Its"  # Vérifie le titre h1
+    assert soup.find('h1').text == "Mon Site de Post-its"  # Vérifie le titre h1
 
 def test_postits_page(authenticated_client):
     """
