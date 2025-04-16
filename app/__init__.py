@@ -4,6 +4,13 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from config import current_config
+from blackfire import probe
+import blackfire
+
+blackfire.patch_all()
+
+# Initialisation de l'agent Blackfire
+probe.initialize()
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -27,9 +34,6 @@ def create_app(testing=False):
     migrate.init_app(app, db)
     login_manager.init_app(app)  # disponible pour tout le projet
 
-    import os
-    os.environ['BLACKFIRE_AGENT_SOCKET'] = 'tcp://blackfire:8307'
-
     # Importation des Blueprints
     from .api import postits_api, auth_api, admin_api
     from .views.postits_html import html_bp
@@ -38,5 +42,11 @@ def create_app(testing=False):
     app.register_blueprint(html_bp)
     app.register_blueprint(auth_api)
     app.register_blueprint(admin_api)
+
+    # # Dans votre app Flask
+    # @app.route('/')
+    # @probe.profile()
+    # def bonjour():
+    #     return 'Hello World'
 
     return app

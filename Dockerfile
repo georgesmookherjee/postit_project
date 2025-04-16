@@ -1,5 +1,5 @@
-# Utilisation de l'image Python légère
-FROM python:3.12-slim
+# Utilisation de l'image Python 3.12 (version stable disponible)
+FROM python:3.13-slim
 
 # Installation de toutes les dépendances système en une seule étape
 RUN apt-get update && apt-get install -y \
@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     libxfixes3 \
     libxrandr2 \
     xdg-utils \
+    && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Définition du répertoire de travail
@@ -35,11 +36,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install playwright pytest-playwright && \
     playwright install chromium --with-deps
 
-# Ajout Blackfire
-RUN pip install blackfire
-
-# Active le profiling Python (injecte un hook au démarrage)
-RUN python -m blackfire bootstrap
+# Installation de Blackfire
+RUN pip install --no-cache-dir blackfire
 
 # Copie du code source
 COPY . .
