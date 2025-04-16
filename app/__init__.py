@@ -4,13 +4,14 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from config import current_config
-from blackfire import probe
-import blackfire
+import os
+# from blackfire import probe
+# import blackfire
 
-blackfire.patch_all()
+# blackfire.patch_all()
 
-# Initialisation de l'agent Blackfire
-probe.initialize()
+# # Initialisation de l'agent Blackfire
+# probe.initialize()
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -43,6 +44,13 @@ def create_app(testing=False):
     app.register_blueprint(auth_api)
     app.register_blueprint(admin_api)
 
+    if app.config.get('ENABLE_BLACKFIRE') and 'BLACKFIRE_SERVER_ID' in os.environ:
+        try:
+            import blackfire
+            from blackfire import BlackfireMiddleware
+            app.wsgi_app = BlackfireMiddleware(app.wsgi_app)
+        except ImportError:
+            pass
     # # Dans votre app Flask
     # @app.route('/')
     # @probe.profile()
