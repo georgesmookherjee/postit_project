@@ -1,4 +1,4 @@
-# Utilisation de l'image Python 3.12 (version stable disponible)
+# Utilisation de l'image Python 3.13
 FROM python:3.13-slim
 
 # Installation de toutes les dépendances système en une seule étape
@@ -36,8 +36,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install playwright pytest-playwright && \
     playwright install chromium --with-deps
 
-# Installation de Blackfire
-RUN pip install --no-cache-dir blackfire
+# # Installation de Blackfire
+# RUN pip install --no-cache-dir blackfire
 
 # Copie du code source
 COPY . .
@@ -46,5 +46,4 @@ COPY . .
 EXPOSE 5000
 
 # Commande de démarrage
-# CMD ["python", "run.py", "--host=0.0.0.0", "--port=5000", "--reload"]
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:create_app()"]
