@@ -46,4 +46,5 @@ COPY . .
 EXPOSE 5000
 
 # Commande de démarrage
-CMD ["python", "run.py", "--host=0.0.0.0", "--port=5000", "--reload"]
+# CMD ["python", "run.py", "--host=0.0.0.0", "--port=5000", "--reload"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:create_app()"]
